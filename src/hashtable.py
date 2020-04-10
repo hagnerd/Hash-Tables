@@ -86,7 +86,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+
+        hashed_key = self._hash_mod(key)
+
+        node = self.storage[hashed_key]
+
+        return self.storage[hashed_key]
 
 
     def resize(self):
