@@ -163,11 +163,15 @@ class HashTable:
         Fill this in.
         '''
 
-        hashed_key = self._hash_mod(key)
+        index = self._hash_mod(key)
 
-        node = self.storage[hashed_key]
+        node = self.storage[index]
+        found_node = node.find_node(key) if node is not None else None
 
-        return self.storage[hashed_key]
+        if node is None or found_node is None:
+            return None
+
+        return found_node.value
 
 
     def resize(self):
