@@ -1,11 +1,89 @@
+class Node:
+    def __init__(self, key, value, next_node=None):
+        self.key = key
+        self.value = value
+        self.next = next_node
+
+    def __str__(self):
+        return f"({self.key}, {self.value})"
+
 # '''
 # Linked List hash table key/value pair
 # '''
 class LinkedPair:
-    def __init__(self, key, value, next_node=None):
-        self.key = key
-        self.value = value
-        self.next = next_node 
+    def __init__(self, key, value):
+        node = Node(key, value)
+        self.head = node
+
+    def __str__(self):
+        curr_node = self.head
+        curr_val = f"{curr_node}"
+
+        while curr_node.next is not None:
+            curr_val += f" ->> {curr_node.next}"
+            curr_node = curr_node.next
+
+        return curr_val
+
+    def insert(self, key, value):
+        """
+        Inserts the key at the last position in the LinkedPair
+        """
+        prev = self.head
+        new_head = Node(key, value, prev)
+        self.head = new_head
+        return new_head
+
+    def find_node(self, key):
+        """
+        Returns None or the found node with a given key
+        """
+        node = self.head
+        found_node = None if node.key != key else node
+
+        while node.next is not None and found_node is None:
+            node = node.next
+            if node is not None and node.key == key:
+                found_node = node
+
+        return found_node
+
+
+    def upsert(self, key, value):
+        """
+        Inserts the key if it doesn't exist, or updates its value if it does
+        """
+        node = self.head
+        found_key = node.key == key
+
+        while not found_key and node.next is not None:
+            node = node.next
+            found_key = node.key == key
+
+        if found_key:
+            node.value = value
+        else:
+            self.insert(key, value)
+
+    def remove(self, key):
+        """
+        Removes a node if it is found
+        """
+        curr = self.head
+        prev = None
+
+        while curr:
+            if curr.key == key:
+                if prev is not None:
+                    prev.next = curr.next
+                else:
+                    self.head = curr.next
+                return self.head
+            prev = curr
+            curr = curr.next
+
+        return None
+
 
 class HashTable:
     '''
