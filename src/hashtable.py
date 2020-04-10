@@ -190,11 +190,36 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        old_storage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
+
+        for pair in old_storage:
+            if pair is not None:
+                node = pair.head
+                while node is not None:
+                    self.insert(node.key, node.value)
+                    node = node.next
 
 
 
 if __name__ == "__main__":
+    ht = HashTable(8)
+
+    ht.insert("key-0", "val-0")
+    ht.insert("key-1", "val-1")
+    ht.insert("key-2", "val-2")
+    ht.insert("key-3", "val-3")
+    ht.insert("key-4", "val-4")
+    ht.insert("key-5", "val-5")
+    ht.insert("key-6", "val-6")
+    ht.insert("key-7", "val-7")
+    ht.insert("key-8", "val-8")
+    ht.insert("key-9", "val-9")
+    ht.remove("key-9")
+
+    print(ht.retrieve("key-9"))
+
     ht = HashTable(2)
 
     ht.insert("line_1", "Tiny hash table")
