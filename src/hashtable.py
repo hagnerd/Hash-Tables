@@ -135,13 +135,11 @@ class HashTable:
 
         hashed_key = self._hash_mod(key)
 
-        new_node = LinkedPair(key, value)
-
-        if self.storage[hashed_key] is not None:
-            print("Collision occurred")
-            self.storage[hashed_key].next = new_node
+        if self.storage[hashed_key] is None:
+            self.storage[hashed_key] = LinkedPair(key, value)
         else:
-            self.storage[hashed_key] = value
+            print(f"WARNING: Collision detected for key {key}")
+            self.storage[hashed_key].upsert(key, value)
 
 
 
