@@ -151,7 +151,16 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        if self.storage[index] is None or self.storage[index].find_node(key) is None:
+            print("No pair found with that key")
+            return
+
+        if self.storage[index].head.next is None:
+            self.storage[index] = None
+            return
+
+        self.storage[index].remove(key)
 
 
     def retrieve(self, key):
