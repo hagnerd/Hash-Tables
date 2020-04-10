@@ -54,7 +54,16 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+
+        hashed_key = self._hash_mod(key)
+
+        new_node = LinkedPair(key, value)
+
+        if self.storage[hashed_key] is not None:
+            print("Collision occurred")
+            self.storage[hashed_key].next = new_node
+        else:
+            self.storage[hashed_key] = value
 
 
 
