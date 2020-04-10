@@ -2,10 +2,10 @@
 # Linked List hash table key/value pair
 # '''
 class LinkedPair:
-    def __init__(self, key, value):
+    def __init__(self, key, value, next_node=None):
         self.key = key
         self.value = value
-        self.next = None
+        self.next = next_node 
 
 class HashTable:
     '''
