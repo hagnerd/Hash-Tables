@@ -21,22 +21,31 @@ class TestHashTable(unittest.TestCase):
 
         return_value = ht.retrieve("key-0")
         self.assertTrue(return_value == "val-0")
+
         return_value = ht.retrieve("key-1")
         self.assertTrue(return_value == "val-1")
+
         return_value = ht.retrieve("key-2")
         self.assertTrue(return_value == "val-2")
+
         return_value = ht.retrieve("key-3")
         self.assertTrue(return_value == "val-3")
+
         return_value = ht.retrieve("key-4")
         self.assertTrue(return_value == "val-4")
+
         return_value = ht.retrieve("key-5")
         self.assertTrue(return_value == "val-5")
+
         return_value = ht.retrieve("key-6")
         self.assertTrue(return_value == "val-6")
+
         return_value = ht.retrieve("key-7")
         self.assertTrue(return_value == "val-7")
+
         return_value = ht.retrieve("key-8")
         self.assertTrue(return_value == "val-8")
+
         return_value = ht.retrieve("key-9")
         self.assertTrue(return_value == "val-9")
 

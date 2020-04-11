@@ -1,11 +1,89 @@
+class Node:
+    def __init__(self, key, value, next_node=None):
+        self.key = key
+        self.value = value
+        self.next = next_node
+
+    def __str__(self):
+        return f"({self.key}, {self.value})"
+
 # '''
 # Linked List hash table key/value pair
 # '''
 class LinkedPair:
     def __init__(self, key, value):
-        self.key = key
-        self.value = value
-        self.next = None
+        node = Node(key, value)
+        self.head = node
+
+    def __str__(self):
+        curr_node = self.head
+        curr_val = f"{curr_node}"
+
+        while curr_node.next is not None:
+            curr_val += f" ->> {curr_node.next}"
+            curr_node = curr_node.next
+
+        return curr_val
+
+    def insert(self, key, value):
+        """
+        Inserts the key at the last position in the LinkedPair
+        """
+        prev = self.head
+        new_head = Node(key, value, prev)
+        self.head = new_head
+        return new_head
+
+    def find_node(self, key):
+        """
+        Returns None or the found node with a given key
+        """
+        node = self.head
+        found_node = None if node.key != key else node
+
+        while node.next is not None and found_node is None:
+            node = node.next
+            if node is not None and node.key == key:
+                found_node = node
+
+        return found_node
+
+
+    def upsert(self, key, value):
+        """
+        Inserts the key if it doesn't exist, or updates its value if it does
+        """
+        node = self.head
+        found_key = node.key == key
+
+        while not found_key and node.next is not None:
+            node = node.next
+            found_key = node.key == key
+
+        if found_key:
+            node.value = value
+        else:
+            self.insert(key, value)
+
+    def remove(self, key):
+        """
+        Removes a node if it is found
+        """
+        curr = self.head
+        prev = None
+
+        while curr:
+            if curr.key == key:
+                if prev is not None:
+                    prev.next = curr.next
+                else:
+                    self.head = curr.next
+                return self.head
+            prev = curr
+            curr = curr.next
+
+        return None
+
 
 class HashTable:
     '''
@@ -54,7 +132,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+
+        hashed_key = self._hash_mod(key)
+
+        if self.storage[hashed_key] is None:
+            self.storage[hashed_key] = LinkedPair(key, value)
+        else:
+            print(f"WARNING: Collision detected for key {key}")
+            self.storage[hashed_key].upsert(key, value)
 
 
 
@@ -66,7 +151,16 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        if self.storage[index] is None or self.storage[index].find_node(key) is None:
+            print("No pair found with that key")
+            return
+
+        if self.storage[index].head.next is None:
+            self.storage[index] = None
+            return
+
+        self.storage[index].remove(key)
 
 
     def retrieve(self, key):
@@ -77,7 +171,16 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+
+        index = self._hash_mod(key)
+
+        node = self.storage[index]
+        found_node = node.find_node(key) if node is not None else None
+
+        if node is None or found_node is None:
+            return None
+
+        return found_node.value
 
 
     def resize(self):
@@ -87,11 +190,36 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        old_storage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
+
+        for pair in old_storage:
+            if pair is not None:
+                node = pair.head
+                while node is not None:
+                    self.insert(node.key, node.value)
+                    node = node.next
 
 
 
 if __name__ == "__main__":
+    ht = HashTable(8)
+
+    ht.insert("key-0", "val-0")
+    ht.insert("key-1", "val-1")
+    ht.insert("key-2", "val-2")
+    ht.insert("key-3", "val-3")
+    ht.insert("key-4", "val-4")
+    ht.insert("key-5", "val-5")
+    ht.insert("key-6", "val-6")
+    ht.insert("key-7", "val-7")
+    ht.insert("key-8", "val-8")
+    ht.insert("key-9", "val-9")
+    ht.remove("key-9")
+
+    print(ht.retrieve("key-9"))
+
     ht = HashTable(2)
 
     ht.insert("line_1", "Tiny hash table")
